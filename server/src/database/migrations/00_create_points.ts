@@ -15,7 +15,6 @@ export async function up(knex:Knex) {
         table.string("whatsapp").notNullable()
         table.string("city").notNullable()
         table.string("uf").notNullable()
-
         table.decimal("latitude").notNullable()
         table.decimal("longitude", 2).notNullable()
 

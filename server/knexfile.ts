@@ -10,6 +10,9 @@ module.exports = {
     migrations: {       // Caminho para as migrations
         directory: Path.resolve(__dirname, "src", "database", "migrations")
     },
+    seeds: {       // Caminho para as seeds(arquivos default da aplicação)
+        directory: Path.resolve(__dirname, "src", "database", "seeds")
+    },
     useNullAsDefault: true
 
 }
