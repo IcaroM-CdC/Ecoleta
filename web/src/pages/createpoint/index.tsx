@@ -1,14 +1,55 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import "./Styles.css"
 import logo from "../../assets/logo.svg"
 import {  Link  } from "react-router-dom"
 import {  Map, TileLayer, Marker} from "react-leaflet"
+import Api from "../../services/api"
+import Axios from "axios"
 
 // Importando o modulo do feather icons
 import {  FiArrowLeft  } from "react-icons/fi"
 
 
-function createPoint() {
+// Interface para os itens retornados da nossa API
+interface Item {
+    id: number
+    title: string
+    image_url: string
+}
+
+interface IBGEUFresponse {
+    sigla: string
+}
+
+
+function CreatePoint() {
+
+    const [items, setItems] = useState<Item[]>([])
+    const [ufs, setUfs] = useState<string[]>([])
+
+    // Função para armazenar o estado
+    useEffect(() => {
+        Api.get("items").then(response => {
+            
+            // Setando o estado com os dados da resposta da requisição
+            setItems(response.data)
+
+        })
+    }, [])
+
+    useEffect(() => {
+
+        // API do IBGE para listar os estados
+        Axios.get<IBGEUFresponse[]>("https://servicodados.ibge.gov.br/api/v1/localidades/estados").then(response => {
+
+            const ufInitials = response.data.map(uf => uf.sigla)
+
+            // Setando o estado dos UFs com os dados a API do IBGE
+            setUfs(ufInitials)
+        })
+    },[])
+
+
     return (
         <div id="page-create-point">
             <header>
@@ -52,14 +93,17 @@ function createPoint() {
                             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
+                        <Marker position={[-27.2092052, -49.6401092]}></Marker>
                     </Map>
-
 
                     <div className="field-group">
                         <div className="field">
                             <label htmlFor="uf">Estado</label>
                             <select name="uf" id="uf">
                                 <option value="0">Selecione um estado</option>
+                                {ufs.map(uf => (
+                                    <option key={uf} value={uf}>{uf}</option>
+                                ))}
                             </select>
                         </div>  
                         <div className="field">
@@ -74,33 +118,17 @@ function createPoint() {
                 <fieldset>
                     <legend>
                         <h2>Itens de coletas</h2>
-                        <span>Selecione um ou mais elementos no mapa</span>
+                        <span>Selecione um ou mais elementos abaixo</span>
                     </legend>
                     <ul className="items-grid">
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
-                        <li>
-                            <img src="" alt=""/>
-                            <span>Teste</span>
-                        </li>
+                        {items.map(item => {
+                            return (
+                                <li key={item.id}>
+                                    <img src={item.image_url} alt={item.title}/>
+                                    <span>{item.title}</span>
+                                </li>   
+                            )
+                        })}
                     </ul>
                 </fieldset>
                 <button type="submit">Cadastrar ponto de coleta</button>
@@ -109,4 +137,4 @@ function createPoint() {
     )
 }
 
-export default createPoint
+export default CreatePoint

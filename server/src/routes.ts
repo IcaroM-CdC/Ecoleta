@@ -59,7 +59,7 @@ routes.post("/users", function(request, response) {
 
 // ####################### ROTAS DOS ITENS ########################
 
-routes.get("/itens", async function(request, response) {
+routes.get("/items", async function(request, response) {
 
     // Conexão com o SQLite
     const items = await Knex("items").select("*")
