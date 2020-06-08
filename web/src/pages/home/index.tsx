@@ -1,11 +1,11 @@
 import React from "react"
 import {  Link  } from "react-router-dom"
-
 import logo from "../../assets/logo.svg"
 import "./Styles.css"
 
 // Importando o modulo do feather icons
 import {  FiLogIn  } from "react-icons/fi"
+
 
 function Home() {
     return (
@@ -21,7 +21,7 @@ function Home() {
 
                     <Link to="/criar-ponto">
                         <span>
-                            <FiLogIn></FiLogIn>
+                            <FiLogIn/>
                         </span>
                         <strong>Cadastre um ponto de coleta</strong>
                     </Link>
